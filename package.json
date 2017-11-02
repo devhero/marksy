@@ -6,6 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --devtool eval-source-map --progress --colors --content-base build",
     "preinstall": "npm i -D babel-cli",
+    "install": "npm run build",
     "prepublish": "npm run build",
     "build": "BABEL_ENV=production babel src/ --out-dir=lib/ -s",
     "test": "jest"
