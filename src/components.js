@@ -1,4 +1,5 @@
 import createRenderer from './createRenderer';
+import { wrap } from './utils';
 import marked from 'marked';
 import {transform} from 'babel-standalone';
 
@@ -47,7 +48,7 @@ export function marksy (options = {}) {
 
         tracker.tree.push(tracker.elements[elementId]);
 
-        return `{{${elementId}}}`;
+        return wrap(elementId, options.prefix, options.postfix);
       }
     }
   })

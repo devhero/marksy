@@ -1,5 +1,6 @@
 import marked from 'marked';
 import he from 'he';
+import { wrap } from './utils';
 
 export default function createRenderer (tracker, options, overrides = {}) {
   const renderer = new marked.Renderer();
@@ -16,9 +17,9 @@ export default function createRenderer (tracker, options, overrides = {}) {
   }
 
   function populateInlineContent (content = '') {
-    const contentArray = content.split(/(\{\{.*?\}\})/);
+    const contentArray = content.split(new RegExp(`(${wrap('.*?', options.prefix, options.postfix, true)})`));
     const extractedElements = contentArray.map(function (text) {
-      const elementIdMatch = text.match(/\{\{(.*)\}\}/);
+      const elementIdMatch = text.match(new RegExp(wrap('(.*)', options.prefix, options.postfix, true)));
       if (elementIdMatch) {
         tracker.tree.splice(tracker.tree.indexOf(tracker.elements[elementIdMatch[1]]), 1)
         return tracker.elements[elementIdMatch[1]];
@@ -46,7 +47,7 @@ export default function createRenderer (tracker, options, overrides = {}) {
 
     tracker.tree.push(tracker.elements[elementId]);
 
-    return `{{${elementId}}}`;
+    return wrap(elementId, options.prefix, options.postfix);
   }
 
   renderer.code = overrides.code || function (code, language) {
@@ -63,7 +64,7 @@ export default function createRenderer (tracker, options, overrides = {}) {
 
     tracker.tree.push(tracker.elements[elementId]);
 
-    return `{{${elementId}}}`;
+    return wrap(elementId, options.prefix, options.postfix);
   };
 
   renderer.html = overrides.html || function (html) {
