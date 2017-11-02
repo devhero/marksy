@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "start": "webpack-dev-server --devtool eval-source-map --progress --colors --content-base build",
-    "prepublish": "npm -i babel-cli; npm run build",
+    "prepublish": "npm i babel-cli; npm run build",
     "build": "BABEL_ENV=production babel src/ --out-dir=lib/ -s",
     "test": "jest"
   },
